@@ -11,7 +11,7 @@ public class Application {
 
     @RequestMapping("/")
     public String home() {
-        return "Hello Docker World from Tenant Thress..!!";
+        return "Hello Docker World from Tenant Three..!!";
     }
 
     public static void main(String[] args) {
