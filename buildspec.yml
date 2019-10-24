@@ -33,13 +33,13 @@ phases:
       - echo Entering post_build phase...
       - echo Build completed on `date`i
       - docker push $REPOSITORY_URI:$TAG
-      - CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::682651395775:role/tenantonenamespace_role --role-session-name codebuild-kubectl --duration-seconds 900)
+      - CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::682651395775:role/tenantthreenamespace_role --role-session-name codebuild-kubectl --duration-seconds 900)
       - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
       - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
-      - kubectl apply -f app_deploy_consolidate.yml -n tenantonenamespace
+      - kubectl apply -f app_deploy_consolidate.yml -n tenantthreenamespace
       - printf '[{"name":"appdeploy","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
 artifacts:
   files:
