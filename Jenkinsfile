@@ -42,24 +42,16 @@ pipeline {
                 '''
             }
         }
-        stage('docker_build') {
-            steps {
-                sh 'echo "This is docker build stage"'
-                sh '''
-                   docker.build('tenantthreerepo')
-                '''
+        stage 'Docker build'
+        docker.build('tenantthreerepo')
+
+        stage 'Docker push'
+        docker.withRegistry('https://682651395775.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:jenkins_ecr_id') {
+          docker.image('tenantthreerepo').push('latest')
+
             }
         }
-        stage('docker_push') {
-            steps {
-                sh 'echo "This is docker build stage"'
-                sh '''
-                   docker.withRegistry('https://682651395775.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:jenkins_ecr_id') {
-                     docker.image('tenantthreerepo').push('latest')
-                   }
-                '''
-            }
-        }
+
         stage('post_build') {
             steps {
                 sh 'echo "This is post build stage"'
