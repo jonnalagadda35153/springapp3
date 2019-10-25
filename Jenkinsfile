@@ -12,7 +12,7 @@ pipeline {
                    sudo apt-get update && apt-get -y install jq python3-pip python3-dev && pip3 install --upgrade awscli
                    echo installing maven...
                    sudo yum update -y
-                   sudo yum install software-properties-common -y
+                   #sudo yum install software-properties-common -y
                    sudo add-apt-repository ppa:openjdk-r/ppa
                    sudo yum update -y
                    sudo yum install -y openjdk-8-jdk
