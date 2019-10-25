@@ -23,7 +23,7 @@ pipeline {
         }
         stage('pre_build') {
             steps {
-                sh 'echo "This is pre build stage"'
+                sh 'echo This is pre build stage'
                 sh '''
                    TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
                    sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' app_deploy_consolidate.yml
@@ -38,14 +38,32 @@ pipeline {
                 sh '''
                    echo Build started on `date`
                    mvn clean package
-                   docker image build --tag $REPOSITORY_URI .
+                   #docker image build --tag $REPOSITORY_URI .
+                '''
+            }
+        }
+        stage('docker_build') {
+            steps {
+                sh 'echo "This is docker build stage"'
+                sh '''
+                   docker.build('tenantthreerepo')
+                '''
+            }
+        }
+        stage('docker_push') {
+            steps {
+                sh 'echo "This is docker build stage"'
+                sh '''
+                   docker.withRegistry('https://682651395775.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:jenkins_ecr_id') {
+                     docker.image('tenantthreerepo').push('latest')
+                   }
                 '''
             }
         }
         stage('post_build') {
             steps {
                 sh 'echo "This is post build stage"'
-                sh '''
+                sh '''ecr
                    echo Build completed on `date`i
                    docker push $REPOSITORY_URI:$TAG
                    CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::682651395775:role/tenantthreenamespace_role --role-session-name codebuild-kubectl --duration-seconds 900)
