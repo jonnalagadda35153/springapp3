@@ -24,11 +24,9 @@ pipeline {
                proc.consumeProcessOutput(sout, serr)
                proc.waitForOrKill(1000)
                println "out> $sout err> $serr"
-
                sh 'sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' app_deploy_consolidate.yml'
                sh '$(aws ecr get-login --no-include-email)'
                sh 'export KUBECONFIG=$HOME/.kube/config'
-
             ])
         }
         stage('Pre_Build') {
