@@ -16,7 +16,7 @@ pipeline {
                    #sudo yum install java-1.8.0-openjdk
                    #sudo add-apt-repository ppa:openjdk-r/ppa
                    sudo yum update -y
-                   sudo yum install -y openjdk-8-jdk
+                   sudo yum install java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-devel.x86_64
                    sudo yum install -y maven
                 '''
             }
