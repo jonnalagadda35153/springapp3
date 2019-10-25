@@ -13,7 +13,8 @@ pipeline {
                    echo installing maven...
                    sudo yum update -y
                    #sudo yum install software-properties-common -y
-                   sudo add-apt-repository ppa:openjdk-r/ppa
+                   #sudo yum install java-1.8.0-openjdk
+                   #sudo add-apt-repository ppa:openjdk-r/ppa
                    sudo yum update -y
                    sudo yum install -y openjdk-8-jdk
                    sudo yum install -y maven
