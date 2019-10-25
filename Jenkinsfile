@@ -11,12 +11,12 @@ pipeline {
                    export PATH=$PWD/:$PATH
                    sudo apt-get update && apt-get -y install jq python3-pip python3-dev && pip3 install --upgrade awscli
                    echo installing maven...
-                   sudo apt-get update -y
-                   sudo apt-get install software-properties-common
+                   sudo yum update -y
+                   sudo yum install software-properties-common
                    sudo add-apt-repository ppa:openjdk-r/ppa
-                   sudo apt-get update
-                   sudo apt-get install -y openjdk-8-jdk
-                   sudo apt-get install -y maven
+                   sudo yum update
+                   sudo yum install -y openjdk-8-jdk
+                   sudo yum install -y maven
                 '''
             }
         }
