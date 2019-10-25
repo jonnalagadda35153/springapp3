@@ -27,7 +27,7 @@ pipeline {
                 sh '''
                    TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
                    sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' app_deploy_consolidate.yml
-                   $(aws ecr get-login --no-include-email)
+                   $(aws ecr get-login --no-include-email --region us-east-1)
                    export KUBECONFIG=$HOME/.kube/config
                 '''
             }
