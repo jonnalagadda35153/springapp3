@@ -2,7 +2,7 @@ pipeline {
     agent any
     stages {
         stage('Install') {
-            steps ([
+            steps {
                 sh 'curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator'
                 sh 'curl -sS -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/kubectl'
                 sh 'chmod +x ./kubectl ./aws-iam-authenticator'
@@ -15,7 +15,7 @@ pipeline {
                 sh 'apt-get update'
                 sh 'apt-get install -y openjdk-8-jdk'
                 sh 'apt-get install -y maven'
-            ])
+           }
         }
         stage('Pre_Build') {
             steps ([
