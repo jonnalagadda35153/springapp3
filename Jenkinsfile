@@ -19,11 +19,7 @@ pipeline {
         }
         stage('Pre_Build') {
             steps ([
-               def sout = new StringBuilder(), serr = new StringBuilder()
-               def proc = 'TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"'.execute()
-               proc.consumeProcessOutput(sout, serr)
-               proc.waitForOrKill(1000)
-               println "out> $sout err> $serr"
+               sh 'TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"'
                sh 'sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' app_deploy_consolidate.yml'
                sh '$(aws ecr get-login --no-include-email)'
                sh 'export KUBECONFIG=$HOME/.kube/config'
