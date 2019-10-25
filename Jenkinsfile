@@ -38,7 +38,7 @@ pipeline {
                 sh '''
                    echo Build started on `date`
                    mvn clean package
-                   docker image build --tag $REPOSITORY_URI:$TAG .
+                   docker image build --t $REPOSITORY_URI .
                 '''
             }
         }
