@@ -18,36 +18,5 @@ pipeline {
            }
         }
 
-        stage('Pre_Build') {
-             steps {
-                sh 'echo Entering build phase...'
-                sh 'echo Build started on `date`'
-                sh 'mvn clean package'
-                sh 'docker image build --tag $REPOSITORY_URI:$TAG .'
-
-              }
-         }
-        stage('Build') {
-             steps {
-              sh 'echo Entering post_build phase...'
-              sh 'echo Build completed on `date`i'
-              sh 'docker push $REPOSITORY_URI:$TAG'
-              sh 'CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::682651395775:role/tenantthreenamespace_role --role-session-name codebuild-kubectl --duration-seconds 900)'
-              sh 'export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"'
-              sh 'export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"'
-              sh 'export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"'
-              sh 'export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')'
-              sh 'aws eks update-kubeconfig --name $EKS_CLUSTER_NAME'
-              sh 'kubectl apply -f app_deploy_consolidate.yml -n tenantonenamespace'
-              //sh 'printf '[{"name":"appdeploy","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json'
-
-              }
-         }
-        post {
-                always {
-                    archiveArtifacts artifacts: 'target/gs-spring-boot-docker-0.1.0.jar', fingerprint: true
-                }
-            }
     }
-
 }
