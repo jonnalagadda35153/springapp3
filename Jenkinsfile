@@ -32,5 +32,32 @@ pipeline {
                 '''
             }
         }
+        stage('build') {
+            steps {
+                sh 'echo "This is build stage"'
+                sh '''
+                   echo Build started on `date`
+                   mvn clean package
+                   docker image build --tag $REPOSITORY_URI:$TAG .
+                '''
+            }
+        }
+        stage('post_build') {
+            steps {
+                sh 'echo "This is post build stage"'
+                sh '''
+                   echo Build completed on `date`i
+                   docker push $REPOSITORY_URI:$TAG
+                   CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::682651395775:role/tenantthreenamespace_role --role-session-name codebuild-kubectl --duration-seconds 900)
+                   export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+                   export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+                   export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+                   export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+                   aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
+                   kubectl apply -f app_deploy_consolidate.yml -n tenantonenamespace
+                   printf '[{"name":"appdeploy","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
+                '''
+            }
+        }
     }
 }
