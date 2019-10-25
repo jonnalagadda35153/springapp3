@@ -2,7 +2,7 @@ pipeline {
     agent any
     stages {
         stage('Install') {
-            steps {
+            steps ([
                 sh 'curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator'
                 sh 'curl -sS -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/kubectl'
                 sh 'chmod +x ./kubectl ./aws-iam-authenticator'
@@ -15,11 +15,16 @@ pipeline {
                 sh 'apt-get update'
                 sh 'apt-get install -y openjdk-8-jdk'
                 sh 'apt-get install -y maven'
-            }
+            ])
         }
         stage('Pre_Build') {
             steps ([
-               sh 'TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"'
+               def sout = new StringBuilder(), serr = new StringBuilder()
+               def proc = 'TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"'.execute()
+               proc.consumeProcessOutput(sout, serr)
+               proc.waitForOrKill(1000)
+               println "out> $sout err> $serr"
+
                sh 'sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' app_deploy_consolidate.yml'
                sh '$(aws ecr get-login --no-include-email)'
                sh 'export KUBECONFIG=$HOME/.kube/config'
