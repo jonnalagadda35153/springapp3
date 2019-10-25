@@ -1,10 +1,21 @@
 pipeline {
     agent any
     stages {
+        stage('Install') {
+            steps {
+                sh 'curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator'
+                sh 'curl -sS -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/kubectl'
+                sh 'chmod +x ./kubectl ./aws-iam-authenticator'
+            }
+        }
         stage('Test') {
             steps {
-                sh 'echo "Fail!"; exit 1'
-                echo 'This is test phase'
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
             }
         }
     }
