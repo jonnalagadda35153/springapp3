@@ -17,6 +17,7 @@ pipeline {
                 sh 'apt-get install -y maven'
            }
         }
+
         stage('Pre_Build') {
              steps {
                 sh 'echo Entering build phase...'
@@ -38,7 +39,7 @@ pipeline {
               sh 'export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')'
               sh 'aws eks update-kubeconfig --name $EKS_CLUSTER_NAME'
               sh 'kubectl apply -f app_deploy_consolidate.yml -n tenantonenamespace'
-              sh 'printf '[{"name":"appdeploy","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json'
+              //sh 'printf '[{"name":"appdeploy","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json'
 
               }
          }
