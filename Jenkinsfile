@@ -12,11 +12,22 @@ pipeline {
                    sudo apt-get update && apt-get -y install jq python3-pip python3-dev && pip3 install --upgrade awscli
                    echo installing maven...
                    sudo yum update -y
-                   sudo yum install software-properties-common
+                   sudo yum install software-properties-common -y
                    sudo add-apt-repository ppa:openjdk-r/ppa
-                   sudo yum update
+                   sudo yum update -y
                    sudo yum install -y openjdk-8-jdk
                    sudo yum install -y maven
+                '''
+            }
+        }
+        stage('pre_build') {
+            steps {
+                sh 'echo "This is pre build stage"'
+                sh '''
+                   TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
+                   sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' app_deploy_consolidate.yml
+                   $(aws ecr get-login --no-include-email)
+                   export KUBECONFIG=$HOME/.kube/config
                 '''
             }
         }
