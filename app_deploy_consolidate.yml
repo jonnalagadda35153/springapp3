@@ -47,8 +47,7 @@ spec:
             - containerPort: 8080
       tolerations:
         - key: "eks.com/tenanttwo"
-          opearator: "Equal"
-          effect: "NoSchedule"
+
 
 ---
 apiVersion: extensions/v1beta1
