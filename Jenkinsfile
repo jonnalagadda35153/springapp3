@@ -28,8 +28,8 @@ pipeline {
             steps {
                 sh 'echo This is pre build stage'
                 sh '''
-                   TAG="springapp3.master.prod.$(date +%Y-%m-%d.%H.%M.%S).1.1"
-                   sed -i 's@CONTAINER_IMAGE@'"springapp3:$TAG"'@' app_deploy_consolidate.yml
+                   TAG="682651395775.dkr.ecr.us-east-1.amazonaws.com/tenantthreerepo:latest"
+                   sed -i 's@CONTAINER_IMAGE@'":$TAG"'@' app_deploy_consolidate.yml
                    $(aws ecr get-login --no-include-email --region us-east-1)
                    export KUBECONFIG=$HOME/.kube/config
                 '''
