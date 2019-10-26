@@ -64,7 +64,7 @@ spec:
         - name: KEYDATA
           value: "ValueData"
       nodeSelector:
-          nodegroup-type: frontend-workloads-aw
+          nodegroup-type: tenanttwo-backend-workloads
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress

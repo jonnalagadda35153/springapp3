@@ -45,8 +45,10 @@ spec:
             allowPrivilegeEscalation: false
           ports:
             - containerPort: 8080
+      nodeSelector:
+        nodegroup-type: tenanttwo-backend-workloads
       tolerations:
-        - key: "eks.com/tenanttwo"
+        - key: "eks.com/tenantone"
 
 
 ---
