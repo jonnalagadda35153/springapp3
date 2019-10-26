@@ -29,7 +29,7 @@ pipeline {
                 sh 'echo This is pre build stage'
                 sh '''
                    TAG="682651395775.dkr.ecr.us-east-1.amazonaws.com/tenantthreerepo:latest"
-                   sed -i 's@CONTAINER_IMAGE@'":$TAG"'@' app_deploy_consolidate.yml
+                   sed -i 's@CONTAINER_IMAGE@'"$TAG"'@' app_deploy_consolidate.yml
                    $(aws ecr get-login --no-include-email --region us-east-1)
                    export KUBECONFIG=$HOME/.kube/config
                 '''
