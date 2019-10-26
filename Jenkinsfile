@@ -45,14 +45,18 @@ pipeline {
 
         stage('Docker_build'){
            steps{
-              docker.build('tenantthreerepo')
+              script{
+                 docker.build('tenantthreerepo')
+               }
            }
         }
 
         stage('Docker_push'){
            steps{
-             docker.withRegistry('https://682651395775.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:jenkins_ecr_id') {
-                 docker.image('tenantthreerepo').push('latest')
+              script{
+                 docker.withRegistry('https://682651395775.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:jenkins_ecr_id') {
+                    docker.image('tenantthreerepo').push('latest')
+              }
             }
           }
         }
