@@ -66,7 +66,7 @@ pipeline {
                 sh 'echo "This is post build stage"'
                 sh '''
                    echo Build completed on `date`i
-                   docker push $REPOSITORY_URI:$TAG
+                   #docker push $REPOSITORY_URI:$TAG
                    CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::682651395775:role/tenantthreenamespace_role --role-session-name codebuild-kubectl --duration-seconds 900)
                    export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
                    export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
