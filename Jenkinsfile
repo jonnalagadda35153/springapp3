@@ -15,6 +15,9 @@ pipeline {
                    #sudo yum install software-properties-common -y
                    #sudo yum install java-1.8.0-openjdk
                    #sudo add-apt-repository ppa:openjdk-r/ppa
+                   wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+                   sudo chmod +x ./jq
+                   sudo cp jq /usr/bin
                    sudo yum update -y
                    sudo yum install java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-devel.x86_64 -y
                    sudo yum install -y maven
