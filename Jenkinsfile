@@ -76,7 +76,7 @@ pipeline {
                    export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
                    export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
                    aws eks update-kubeconfig --name EFX-MultiTenant-EKS --region us-west-2
-                   kubectl apply -f app_deploy_consolidate.yml -n tenantonenamespace
+                   kubectl apply -f app_deploy_consolidate.yml -n tenantthreenamespace
                    printf '[{"name":"appdeploy","imageUri":"%s"}]' $REPOSITORY_URI:$TAG > build.json
                 '''
             }
