@@ -64,7 +64,7 @@ pipeline {
         stage('post_build') {
             steps {
                 sh 'echo "This is post build stage"'
-                sh '''ecr
+                sh '''
                    echo Build completed on `date`i
                    docker push $REPOSITORY_URI:$TAG
                    CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::682651395775:role/tenantthreenamespace_role --role-session-name codebuild-kubectl --duration-seconds 900)
